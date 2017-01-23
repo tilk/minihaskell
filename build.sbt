@@ -1,4 +1,5 @@
-scalaVersion in ThisBuild := "2.11.8"
+scalaVersion in ThisBuild := "2.12.1"
+crossScalaVersions in ThisBuild := Seq("2.11.8", "2.12.1")  
 
 import ReleaseTransformations._
 
@@ -27,7 +28,7 @@ val minihaskell = crossProject.in(file(".")).settings(
         "org.scalacheck" %%% "scalacheck" % "1.13.2" % "test",
         "org.scalatest" %% "scalatest" % "3.0.1" % "test",
         "org.typelevel" %%% "cats" % "0.8.1",
-        "com.lihaoyi" %%% "fastparse" % "0.4.1"
+        "com.lihaoyi" %%% "fastparse" % "0.4.2"
     ),
     organization := "eu.tilk",
     licenses += ("LGPL 3.0", url("https://opensource.org/licenses/LGPL-3.0")),
