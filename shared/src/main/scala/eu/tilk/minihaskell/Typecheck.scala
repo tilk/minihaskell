@@ -9,6 +9,7 @@ case class DefNotFoundMsg(val v : String) extends TypeErrorMsg
 case class NotEnoughArgumentsMsg(val v : String) extends TypeErrorMsg
 case class OccursCheckMsg(val v : String, val tp : Type) extends TypeErrorMsg
 case class UnificationErrorMsg(val t1 : Type, val t2 : Type) extends TypeErrorMsg
+case class UnboundVariableMsg(val v : String) extends TypeErrorMsg
 case object ImplementationErrorMsg extends TypeErrorMsg
 
 final case class TypeError(val pos : Pos, val msg : TypeErrorMsg)
@@ -86,7 +87,7 @@ class Typecheck(tenv : Map[String, TypeSchema]) {
   }
   
   private def typecheck(e : Expr, m : Map[String, TypeSchema]) : Either[TypeError, Type] = e match {
-    case VarE(v) => Right(instSchema(m(v)))
+    case VarE(v) => m.get(v).map(instSchema).toRight(TypeError(e.pos, UnboundVariableMsg(v)))
     case LamE(p, e) => for {
       p <- typecheckPat(p); (pt, pmap) = p
       rt <- typecheck(e, m ++ pmap.mapValues(TypeSchema(_)))
